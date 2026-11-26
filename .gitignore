@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+*.pem
+*.sig
+# apenas material publico de exemplo e versionado
+!exemplos/chave_publica.pem
+!exemplos/documento.txt.sig

@@ -1,0 +1,6 @@
+INSTITUICAO FICTICIA DE ENSINO
+
+Declaracao de exemplo (dados ficticios)
+Aluno(a): Estudante Exemplo
+Curso: Curso Demonstrativo
+Carga horaria: 40 horas

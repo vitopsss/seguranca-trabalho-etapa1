@@ -1,0 +1,58 @@
+Interoperabilidade com OpenSSL (arquivos ficticios)
+
+$ python src/seguranca.py keygen a.key.pem a.pub.pem
+Chave privada gravada em: a.key.pem
+Chave pública gravada em: a.pub.pem
+Atenção: a chave privada não tem senha. Não compartilhe nem versione.
+[codigo de saida: 0]
+
+$ python src/seguranca.py sign documento.txt a.key.pem a.sig
+Assinatura gravada em: a.sig
+[codigo de saida: 0]
+
+$ openssl pkeyutl -verify -pubin -inkey a.pub.pem -rawin -in documento.txt -sigfile a.sig
+Signature Verified Successfully
+[codigo de saida: 0]
+
+$ openssl genpkey -algorithm ed25519 -out o.key.pem
+[codigo de saida: 0]
+
+$ openssl pkey -in o.key.pem -pubout -out o.pub.pem
+[codigo de saida: 0]
+
+$ openssl pkeyutl -sign -inkey o.key.pem -rawin -in documento.txt -out o.sig
+[codigo de saida: 0]
+
+$ python src/seguranca.py verify documento.txt o.pub.pem o.sig
+ASSINATURA VÁLIDA
+[codigo de saida: 0]
+
+$ python src/seguranca.py sign documento.txt o.key.pem o2.sig
+Assinatura gravada em: o2.sig
+[codigo de saida: 0]
+
+$ cmp o.sig o2.sig
+[codigo de saida: 0]
+
+$ python src/seguranca.py hash documento.txt
+391ee62ff3bb353a88b0c3aefa0d9cb9d58c7b5068ff05f8373fff14bd62b73d
+[codigo de saida: 0]
+
+$ sha256sum documento.txt
+391ee62ff3bb353a88b0c3aefa0d9cb9d58c7b5068ff05f8373fff14bd62b73d *documento.txt
+[codigo de saida: 0]
+
+Falhas esperadas
+
+$ python src/seguranca.py verify documento.txt a.pub.pem o.sig
+ASSINATURA INVÁLIDA
+[codigo de saida: 1]
+
+$ python src/seguranca.py verify documento.txt a.pub.pem a.sig
+ASSINATURA INVÁLIDA
+[codigo de saida: 1]
+
+$ python src/seguranca.py hash nao_existe.txt
+ERRO: arquivo não encontrado: nao_existe.txt
+[codigo de saida: 2]
+
